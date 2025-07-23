@@ -64,14 +64,11 @@ export default function Header( props: { isLogin: boolean, user: any } ) {
                 ):(    
               <>  
                 <li>
-                  <div
+                  <Link href="/login"
                     className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
                   >
-                     <button type="submit">
-                       Login
-                    </button>
-                  
-                  </div>
+                  Login
+                  </Link>
                 </li>
                 <li>
                   <Link
