@@ -1,3 +1,4 @@
+'use client'
 import Link from "next/link";
 import { useState } from "react";
 export default function Header( props: { isLogin: boolean, user: any } ) {
@@ -8,9 +9,9 @@ export default function Header( props: { isLogin: boolean, user: any } ) {
     <header className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white sticky top-0 z-50">
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/">
-          <a className="text-2xl font-extrabold tracking-tight">
+          <p className="text-2xl font-extrabold tracking-tight">
             Musica
-          </a>
+          </p>
         </Link>
         <button
           className="md:hidden focus:outline-none"
