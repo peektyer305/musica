@@ -17,6 +17,7 @@ export default function LoginPage() {
 
           {/* Login Card */}
           <Card className="shadow-xl border-0">
+            <form>
             <CardHeader className="space-y-1 pb-6">
               <CardTitle className="text-2xl text-center">ログイン</CardTitle>
               <CardDescription className="text-center">メールアドレスとパスワードを入力してください</CardDescription>
@@ -30,7 +31,7 @@ export default function LoginPage() {
                 </Label>
                 <div className="relative">
                   <Mail className="h-4 w-4 text-gray-400 absolute left-3 top-4.5" />
-                  <Input id="email" type="email" placeholder="your@email.com" className="h-12 pl-10" required />
+                  <Input id="email" type="email" name="email" placeholder="your@email.com" className="h-12 pl-10" required />
                 </div>
               </div>
 
@@ -49,6 +50,7 @@ export default function LoginPage() {
                   <Input
                     id="password"
                     type="password"
+                    name="password"
                     placeholder="パスワードを入力"
                     className="pl-10 pr-10 h-12"
                     required
@@ -125,6 +127,7 @@ export default function LoginPage() {
                 </a>
               </div>
             </CardFooter>
+            </form>
           </Card>
 
           {/* Additional Info */}
