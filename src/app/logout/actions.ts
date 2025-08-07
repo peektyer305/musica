@@ -19,5 +19,4 @@ export async function logout() {
     // redirect('/');
     revalidatePath('/');
     redirect('/');
-  return { success: true };
 }
