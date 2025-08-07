@@ -66,11 +66,7 @@ export default function Header( props: { isLogin: boolean, user: any } ) {
                   <div
                     className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
                   >
-                   {/* <Form method="post" action="/auth/auth0">
-                     <button type="submit">
-                       Login
-                    </button>
-                   </Form> */}
+                    <Link href="/login">Login</Link>
                   </div>
                 </li>
                 <li>
