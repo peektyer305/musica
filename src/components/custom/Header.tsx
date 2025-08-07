@@ -1,11 +1,26 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Music } from "lucide-react";
-export default function Header( props: { isLogin: boolean, user: any } ) {
-  const { isLogin, user } = props;
+import { createClient } from "@/utils/supabase/client";
+export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   
+  //現在のユーザー情報を取得
+  const getCurrentUser = async () => {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+  }
+
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
   return (
     <header className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white sticky top-0 z-50">
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
@@ -54,11 +69,7 @@ export default function Header( props: { isLogin: boolean, user: any } ) {
                 Logout
               </Link>
             </li>
-            <li> <button type="button" onClick={() => {
-              console.log(user);
-            }} className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition">
-              Token
-            </button></li>
+        
             </>
                 ):(    
               <>  
