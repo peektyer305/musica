@@ -17,6 +17,6 @@ export async function logout() {
   // Optionally, you can redirect or revalidate the path after logout
   // revalidatePath('/', 'layout');
     // redirect('/');
-    revalidatePath('/');
+    revalidatePath("/", 'layout');
     redirect('/');
 }

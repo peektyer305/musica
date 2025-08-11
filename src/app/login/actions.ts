@@ -30,7 +30,13 @@ export async function signInWithGithub() {
     const supabase = await createClient()
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
+        options: {
+            redirectTo: `${process.env.HOST_URL}/auth/callback`
+        }
     })
+    if (data.url) {
+        redirect(data.url)
+    }
     data && console.log('GitHub sign-in data:', data)
     if (error) {
         console.error('GitHub sign-in error:', error)
