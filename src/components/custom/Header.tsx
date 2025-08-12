@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Music } from "lucide-react";
+import { Music, Info, PlusCircle, LogOut, LogIn, UserPlus } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -76,8 +76,9 @@ export default function Header() {
             <li>
               <Link
                 href="/about"
-                className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
+                className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
               >
+                <Info className="h-4 w-4" />
                 About
               </Link>
             </li>
@@ -86,17 +87,19 @@ export default function Header() {
                 <li>
                   <button
                     type="button"
-                    className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
+                    className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
                     // onClick={() => setReadyPost(true)}
                   >
+                    <PlusCircle className="h-4 w-4" />
                     Post
                   </button>
                 </li>
                 <li>
                   <Link
                     href="/logout"
-                    className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
+                    className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
                   >
+                    <LogOut className="h-4 w-4" />
                     Logout
                   </Link>
                 </li>
@@ -104,15 +107,17 @@ export default function Header() {
             ) : (
               <>
                 <li>
-                  <div className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition">
+                  <div className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition">
+                    <LogIn className="h-4 w-4" />
                     <Link href="/login">Login</Link>
                   </div>
                 </li>
                 <li>
                   <Link
                     href="/signup"
-                    className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
+                    className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
                   >
+                    <UserPlus className="h-4 w-4" />
                     SignUp
                   </Link>
                 </li>

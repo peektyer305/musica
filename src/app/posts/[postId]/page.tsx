@@ -159,7 +159,7 @@ export default async function PostPage({ params }: PostPageProps) {
             className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors text-sm sm:text-base"
           >
             <span>←</span>
-            <span>Back to feed</span>
+            <span>Back to Home</span>
           </Link>
         </div>
       </div>
