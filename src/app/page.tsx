@@ -4,6 +4,7 @@ import Post from "@/interfaces/domain/post";
 import { fetchMetadata } from "@/lib/fetchMetadata";
 import InfraPost from "@/interfaces/infrastructure/post";
 import { mergePostData } from "@/lib/mergePostData";
+import PostCard from "@/components/custom/PostCard";
 
 const getPosts = async (): Promise<Post[]> => {
   try {
@@ -42,6 +43,11 @@ export default async function Home() {
       <div className="text-center mb-8">
         <h1 className="text-2xl font-bold">Welcome to Musica</h1>
         <p className="mt-4">Share your favorite music with the world!</p>
+      </div>
+      <div>
+        {posts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
       </div>
     </main>
   );
