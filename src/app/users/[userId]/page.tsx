@@ -1,13 +1,13 @@
-import Image from "next/image";
 import { createClient } from "@/utils/supabase/server";
 import InfraUser from "@/interfaces/infrastructure/user";
 import InfraPost from "@/interfaces/infrastructure/post";
 import Post from "@/interfaces/domain/post";
 import User from "@/interfaces/domain/user";
-import { formatDate } from "@/lib/utils";
 import { fetchMetadata } from "@/lib/fetchMetadata";
 import { mergePostData } from "@/lib/mergePostData";
 import PostCard from "@/components/custom/PostCard";
+import UserProfileHeader from "@/components/custom/UserProfileHeader";
+import UserStats from "@/components/custom/UserStats";
 import { notFound } from "next/navigation";
 
 interface UserPageProps {
@@ -85,67 +85,40 @@ export default async function UserPage({ params }: UserPageProps) {
     notFound();
   }
 
-  const formattedJoinDate = formatDate(userData.created_at);
+  const userStats = {
+    following: 0,
+    followers: 0,
+    posts: userPosts.length,
+  };
 
   return (
-    <main className="flex-1 px-6 py-12">
-      <div className="max-w-4xl mx-auto">
+    <main className="flex-1 bg-white">
+      <div className="w-auto mx-auto">
         {/* User Profile Header */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-          <div className="flex items-center space-x-6">
-            {userData.icon_url && (
-              <Image
-                src={userData.icon_url}
-                alt={userData.name}
-                width={120}
-                height={120}
-                className="rounded-full object-cover"
-              />
-            )}
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                {userData.name}
-              </h1>
-              <p className="text-lg text-gray-600 mb-2">@{userData.client_id}</p>
-              <p className="text-sm text-gray-500">
-                Joined {formattedJoinDate}
-              </p>
-            </div>
-          </div>
-        </div>
-
+        <UserProfileHeader user={userData} isOwnProfile={false} />
+        
         {/* User Stats */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            <div>
-              <div className="text-2xl font-bold text-purple-600">
-                {userPosts.length}
-              </div>
-              <div className="text-gray-600">Posts</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-purple-600">0</div>
-              <div className="text-gray-600">Followers</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-purple-600">0</div>
-              <div className="text-gray-600">Following</div>
-            </div>
-          </div>
-        </div>
+        <UserStats stats={userStats} />
 
         {/* User Posts */}
-        <div className="mb-8">
-          <h2 className="text-xl font-bold mb-6 text-center">Posts by {userData.name}</h2>
+        <div className="px-4 sm:px-6 lg:px-8 py-6">
           {userPosts.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {userPosts.map((post) => (
                 <PostCard key={post.id} post={post} />
               ))}
             </div>
           ) : (
-            <div className="text-center py-8">
-              <p className="text-gray-500">No posts yet.</p>
+            <div className="text-center py-12 sm:py-16 lg:py-20">
+              <div className="max-w-md mx-auto">
+                <div className="text-gray-400 text-6xl sm:text-7xl mb-6">🎵</div>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+                  No posts yet
+                </h3>
+                <p className="text-gray-500 text-sm sm:text-base">
+                  When {userData.name} shares music, it will show up here.
+                </p>
+              </div>
             </div>
           )}
         </div>
