@@ -8,10 +8,11 @@ export default function PostCard(props: { post: Post }) {
   const { post } = props;
   const formattedCreatedAt = formatDate(post.created_at);
   return (
+    <Link href={`/posts/${post.id}`} className="flex-1">
     <div className="bg-white border rounded-lg shadow-lg overflow-hidden flex flex-col w-full max-w-lg mx-auto mb-8">
       {/* User Info */}
       <div className="flex items-center p-4 bg-gray-100">
-        <Link href={`/users/${post.user_id}`} className="flex items-center">
+   
         {post.Users.icon_url && (
           <Image
             src={post.Users.icon_url}
@@ -22,20 +23,18 @@ export default function PostCard(props: { post: Post }) {
           />
         )}
         <div className="ml-3 text-base font-semibold truncate max-w-[140px]">
-          {post.Users.name}
+          {post.Users.name}1
           <p className="text-gray-500 text-sm">@{post.Users.client_id}</p>
         </div>
-        </Link>
+        
         <div className="ml-auto text-xs text-gray-600 whitespace-nowrap">
           {formattedCreatedAt}
         </div>
       </div>
-
       {/* Image Carousel in Square */}
       <div className="relative w-full aspect-square">
         <div className="absolute inset-0 flex">
           <div className="embla__slide flex-shrink-0 w-full">
-            <a href={post.music_url} target="_blank" rel="noreferrer">
               <Image
                 src={post.music.image_url}
                 alt={post.music.title}
@@ -43,7 +42,6 @@ export default function PostCard(props: { post: Post }) {
                 width={1280}
                 height={720}
               />
-            </a>
           </div>
         </div>
       </div>
@@ -56,5 +54,6 @@ export default function PostCard(props: { post: Post }) {
         <p className="text-gray-600 text-sm line-clamp-4">{post.content}</p>
       </div>
     </div>
+    </Link>
   );
 }

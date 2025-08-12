@@ -44,10 +44,12 @@ async function getUserPosts(userId: string): Promise<Post[]> {
     const { data, error } = await supabase
       .schema("app")
       .from("Posts")
-      .select(`
+      .select(
+        `
         *,
         Users(name, icon_url, client_id)
-      `)
+      `,
+      )
       .eq("user_id", userId)
       .order("created_at", { ascending: false });
 
@@ -63,7 +65,7 @@ async function getUserPosts(userId: string): Promise<Post[]> {
           return mergePostData(post, metadata);
         }
         return null;
-      })
+      }),
     );
 
     return mergedPosts.filter((post): post is Post => post !== null);
@@ -75,7 +77,7 @@ async function getUserPosts(userId: string): Promise<Post[]> {
 
 export default async function UserPage({ params }: UserPageProps) {
   const { userId } = params;
-  
+
   const [userData, userPosts] = await Promise.all([
     getUserData(userId),
     getUserPosts(userId),
@@ -96,7 +98,7 @@ export default async function UserPage({ params }: UserPageProps) {
       <div className="w-auto mx-auto">
         {/* User Profile Header */}
         <UserProfileHeader user={userData} isOwnProfile={false} />
-        
+
         {/* User Stats */}
         <UserStats stats={userStats} />
 
@@ -111,7 +113,9 @@ export default async function UserPage({ params }: UserPageProps) {
           ) : (
             <div className="text-center py-12 sm:py-16 lg:py-20">
               <div className="max-w-md mx-auto">
-                <div className="text-gray-400 text-6xl sm:text-7xl mb-6">🎵</div>
+                <div className="text-gray-400 text-6xl sm:text-7xl mb-6">
+                  🎵
+                </div>
                 <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
                   No posts yet
                 </h3>
