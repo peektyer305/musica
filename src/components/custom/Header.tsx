@@ -6,6 +6,8 @@ import { createClient } from "@/utils/supabase/client";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   //現在のユーザー情報を取得
   const getCurrentUser = async () => {
@@ -20,11 +22,40 @@ export default function Header() {
     }
   };
 
+  // スクロール時のヘッダー表示制御
+  const controlHeader = () => {
+    if (typeof window !== 'undefined') {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY < lastScrollY || currentScrollY < 10) {
+        // スクロールアップまたは上部にいる場合は表示
+        setIsVisible(true);
+      } else {
+        // スクロールダウンの場合は非表示
+        setIsVisible(false);
+        setMenuOpen(false); // モバイルメニューを閉じる
+      }
+      
+      setLastScrollY(currentScrollY);
+    }
+  };
+
   useEffect(() => {
     getCurrentUser();
   }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', controlHeader);
+      return () => {
+        window.removeEventListener('scroll', controlHeader);
+      };
+    }
+  }, [lastScrollY]);
   return (
-    <header className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white sticky top-0 z-50">
+    <header className={`bg-gradient-to-r from-purple-600 to-indigo-600 text-white fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out ${
+      isVisible ? 'translate-y-0' : '-translate-y-full'
+    }`}>
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
         <Link
           href="/"
