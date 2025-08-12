@@ -14,7 +14,7 @@ export default interface Post {
   music: {
     title: string;
     description?: string;
-      image_url: string;
-        url: string;
+    image_url: string;
+    url: string;
   };
 }

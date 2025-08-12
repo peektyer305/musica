@@ -6,17 +6,19 @@ import { createClient } from "@/utils/supabase/client";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
-  
+
   //現在のユーザー情報を取得
   const getCurrentUser = async () => {
     const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (user) {
       setIsLogin(true);
     } else {
       setIsLogin(false);
     }
-  }
+  };
 
   useEffect(() => {
     getCurrentUser();
@@ -24,8 +26,11 @@ export default function Header() {
   return (
     <header className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white sticky top-0 z-50">
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-extrabold tracking-tight flex items-center">
-         <Music className="inline-block mr-2 h-7 w-7 " /> Musica
+        <Link
+          href="/"
+          className="text-2xl font-extrabold tracking-tight flex items-center"
+        >
+          <Music className="inline-block mr-2 h-7 w-7 " /> Musica
         </Link>
         <button
           className="md:hidden focus:outline-none"
@@ -33,12 +38,32 @@ export default function Header() {
           aria-label="Toggle Menu"
         >
           {menuOpen ? (
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           ) : (
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
           )}
         </button>
@@ -49,34 +74,37 @@ export default function Header() {
         >
           <ul className="flex flex-col md:flex-row md:space-x-6 p-4 md:p-0">
             <li>
-                  <Link
-                    href="/about"
-                    className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
-                  >
-                    About
-                  </Link>
-                </li>
-                { isLogin ? (<><li>
-              <button
-                type="button"
+              <Link
+                href="/about"
                 className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
-                // onClick={() => setReadyPost(true)}
               >
-                Post
-              </button></li>
-              <li>
-              <Link href="/logout" className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition">
-                Logout
+                About
               </Link>
             </li>
-        
-            </>
-                ):(    
-              <>  
+            {isLogin ? (
+              <>
                 <li>
-                  <div
+                  <button
+                    type="button"
+                    className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
+                    // onClick={() => setReadyPost(true)}
+                  >
+                    Post
+                  </button>
+                </li>
+                <li>
+                  <Link
+                    href="/logout"
                     className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
                   >
+                    Logout
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <div className="block px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition">
                     <Link href="/login">Login</Link>
                   </div>
                 </li>
@@ -88,7 +116,8 @@ export default function Header() {
                     SignUp
                   </Link>
                 </li>
-              </>) }  
+              </>
+            )}
           </ul>
         </nav>
       </div>

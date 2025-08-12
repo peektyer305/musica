@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-no-comment-textnodes */
 import useEmblaCarousel from "embla-carousel-react";
 import "../styles/embla.css";
-import {formatDate} from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import Post from "@/interfaces/post";
 
 export default function PostCard(props: { post: Post }) {
@@ -14,16 +14,17 @@ export default function PostCard(props: { post: Post }) {
       {/* User Info */}
       <div className="flex items-center p-4 bg-gray-100">
         {/* <Link to={`/users/${post.userId}`} className="flex items-center"> */}
-          {post.Users.icon_url && (
-            <img
-              src={post.Users.icon_url}
-              alt={post.Users.name}
-              className="h-12 w-12 rounded-full object-cover"
-            />
-          )}
-          <div className="ml-3 text-base font-semibold truncate max-w-[140px]">
-            {post.Users.name}<p className="text-gray-500 text-sm">@{post.Users.client_id}</p>
-          </div>
+        {post.Users.icon_url && (
+          <img
+            src={post.Users.icon_url}
+            alt={post.Users.name}
+            className="h-12 w-12 rounded-full object-cover"
+          />
+        )}
+        <div className="ml-3 text-base font-semibold truncate max-w-[140px]">
+          {post.Users.name}
+          <p className="text-gray-500 text-sm">@{post.Users.client_id}</p>
+        </div>
         {/* </Link> */}
         <div className="ml-auto text-xs text-gray-600 whitespace-nowrap">
           {formattedCreatedAt}
