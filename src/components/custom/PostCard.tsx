@@ -3,7 +3,7 @@
 import useEmblaCarousel from "embla-carousel-react";
 import "../styles/embla.css";
 import { formatDate } from "@/lib/utils";
-import Post from "@/interfaces/post";
+import Post from "@/interfaces/domain/post";
 
 export default function PostCard(props: { post: Post }) {
   const { post } = props;

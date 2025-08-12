@@ -1,7 +1,9 @@
 import Image from "next/image";
 
-import Post from "@/interfaces/post";
+import Post from "@/interfaces/domain/post";
 import { fetchMetadata } from "@/lib/fetchMetadata";
+import InfraPost from "@/interfaces/infrastructure/post";
+import { mergePostData } from "@/lib/mergePostData";
 
 const getPosts = async (): Promise<Post[]> => {
   try {
@@ -17,13 +19,15 @@ const getPosts = async (): Promise<Post[]> => {
       return [];
     }
     const data = await response.json();
-    const targetUrl = data[0]?.music_url || "";
-    if (targetUrl) {
-      console.log("Fetching metadata for:", targetUrl);
-      const testText = await fetchMetadata(targetUrl);
-      console.log("Fetched metadata:", testText);
-    }
-    return response.json();
+    const mergedPosts = await Promise.all(
+      data.map(async (post: InfraPost) => {
+        const metadata = await fetchMetadata(post.music_url);
+        if (metadata) {
+          return mergePostData(post, metadata);
+        }
+      }),
+    );
+    return mergedPosts;
   } catch (error) {
     console.error("Error fetching posts:", error);
     return [];

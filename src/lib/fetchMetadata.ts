@@ -1,8 +1,8 @@
-import Metadata from "@/interfaces/metadata";
+import Metadata from "@/interfaces/infrastructure/metadata";
 import * as cheerio from "cheerio";
 
 const FETCH_TIMEOUT_MS = 8000;
-export async function fetchMetadata(targetUrl: string) {
+export async function fetchMetadata(targetUrl: string): Promise<Metadata | null> {
   const ac = new AbortController();
   const timeout = setTimeout(() => ac.abort(), FETCH_TIMEOUT_MS);
 
