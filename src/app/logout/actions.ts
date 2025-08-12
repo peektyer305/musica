@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
@@ -10,13 +10,13 @@ export async function logout() {
   const { error } = await supabase.auth.signOut();
 
   if (error) {
-    console.error('Logout error:', error);
-    throw new Error('Failed to log out');
+    console.error("Logout error:", error);
+    throw new Error("Failed to log out");
   }
 
   // Optionally, you can redirect or revalidate the path after logout
   // revalidatePath('/', 'layout');
-    // redirect('/');
-    revalidatePath("/", 'layout');
-    redirect('/');
+  // redirect('/');
+  revalidatePath("/", "layout");
+  redirect("/");
 }
