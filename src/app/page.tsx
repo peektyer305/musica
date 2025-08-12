@@ -44,7 +44,7 @@ export default async function Home() {
         <h1 className="text-2xl font-bold">Welcome to Musica</h1>
         <p className="mt-4">Share your favorite music with the world!</p>
       </div>
-      <div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {posts.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}

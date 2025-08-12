@@ -2,6 +2,7 @@
 import { formatDate } from "@/lib/utils";
 import Post from "@/interfaces/domain/post";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function PostCard(props: { post: Post }) {
   const { post } = props;
@@ -10,7 +11,7 @@ export default function PostCard(props: { post: Post }) {
     <div className="bg-white border rounded-lg shadow-lg overflow-hidden flex flex-col w-full max-w-lg mx-auto mb-8">
       {/* User Info */}
       <div className="flex items-center p-4 bg-gray-100">
-        {/* <Link to={`/users/${post.userId}`} className="flex items-center"> */}
+        <Link href={`/users/${post.user_id}`} className="flex items-center">
         {post.Users.icon_url && (
           <Image
             src={post.Users.icon_url}
@@ -24,7 +25,7 @@ export default function PostCard(props: { post: Post }) {
           {post.Users.name}
           <p className="text-gray-500 text-sm">@{post.Users.client_id}</p>
         </div>
-        {/* </Link> */}
+        </Link>
         <div className="ml-auto text-xs text-gray-600 whitespace-nowrap">
           {formattedCreatedAt}
         </div>
