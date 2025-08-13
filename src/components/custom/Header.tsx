@@ -1,17 +1,35 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Music, Info, PlusCircle, LogOut, LogIn, UserPlus, User, Loader2 } from "lucide-react";
+import { Music, Info, PlusCircle, LogOut, LogIn, UserPlus, User } from "lucide-react";
 import Image from "next/image";
+import { createClient } from "@/utils/supabase/client";
 import { useAuthStore } from "@/stores/authStore";
-import { useAuthHelpers } from "@/lib/auth-helpers";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [userIcon, setUserIcon] = useState<string | null>(null);
   const user = useAuthStore((state) => state.user);
   const isLoading = useAuthStore((state) => state.isLoading);
-  const { clientLogout } = useAuthHelpers();
+  
+  //現在のユーザー情報を取得
+  const getCurrentUser = async () => {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      console.log("Current user:", user);
+      setIsLogin(true);
+      // user.user_metadata.avatar_url ? setUserIcon(user.user_metadata.avatar_url) : setUserIcon("@static/userDefault.webp");
+      
+    } else {
+      setUserIcon(null);
+      setIsLogin(false);
+    }
+  };
 
   // スクロール時のヘッダー表示制御
   const controlHeader = () => {
@@ -30,6 +48,10 @@ export default function Header() {
       setLastScrollY(currentScrollY);
     }
   };
+
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -85,29 +107,28 @@ export default function Header() {
             </svg>
           )}
         </button>
-        {!isLoading && (
-          <nav
-            className={`absolute inset-x-0 top-full bg-white text-gray-800 flex flex-col md:static md:flex md:flex-row md:bg-transparent md:text-white ${
-              menuOpen ? "flex" : "hidden"
-            }`}
-          >
-            <ul className="flex flex-col md:flex-row md:space-x-6 p-4 md:p-0">
+        <nav
+          className={`absolute inset-x-0 top-full bg-white text-gray-800 flex flex-col md:static md:flex md:flex-row md:bg-transparent md:text-white ${
+            menuOpen ? "flex" : "hidden"
+          }`}
+        >
+          <ul className="flex flex-col md:flex-row md:space-x-6 p-4 md:p-0">
             {/* User Icon - Mobile */}
-            {user && (
+            {isLogin && userIcon && (
               <li className="md:hidden border-b border-gray-300 pb-3 mb-3">
                 <div className="flex items-center gap-3 px-3 py-2">
-                  {user.user_metadata.avatar_url ? (
+                  {userIcon.startsWith('@static/') ? (
                     <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
-                     <Image
-                      src={user.user_metadata.avatar_url}
+                      <User className="h-4 w-4 text-gray-600" />
+                    </div>
+                  ) : (
+                    <Image
+                      src={userIcon}
                       alt="User Avatar"
                       className="h-8 w-8 rounded-full object-cover"
                       width={32}
                       height={32}
                     />
-                    </div>
-                  ) : (
-                    <User className="h-8 w-8 text-gray-600" />
                   )}
                   <span className="font-medium text-gray-900">Profile</span>
                 </div>
@@ -123,7 +144,7 @@ export default function Header() {
                 About
               </Link>
             </li>
-            {user ? (
+            {isLogin ? (
               <>
                 <li>
                   <button
@@ -136,30 +157,30 @@ export default function Header() {
                   </button>
                 </li>
                 <li>
-                  <button
-                    onClick={clientLogout}
-                    className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition w-full text-left"
+                  <Link
+                    href="/logout"
+                    className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
                   >
                     <LogOut className="h-4 w-4" />
                     Logout
-                  </button>
+                  </Link>
                 </li>
                 {/* User Icon - Desktop */}
-                {user.user_metadata.avatar_url && (
+                {userIcon && (
                   <li className="hidden md:block">
                     <div className="flex items-center px-3 py-2">
-                      {user.user_metadata.avatar_url ? (
+                      {userIcon.startsWith('@static/') ? (
                         <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center">
-                          <Image
-                          src={user.user_metadata.avatar_url}
+                          <User className="h-4 w-4" />
+                        </div>
+                      ) : (
+                        <Image
+                          src={userIcon}
                           alt="User Avatar"
                           className="h-8 w-8 rounded-full object-cover border-2 border-white/20"
                           width={32}
                           height={32}
                         />
-                        </div>
-                      ) : (
-                        <User className="h-4 w-4" />
                       )}
                     </div>
                   </li>
@@ -184,9 +205,8 @@ export default function Header() {
                 </li>
               </>
             )}
-            </ul>
-          </nav>
-        )}
+          </ul>
+        </nav>
       </div>
     </header>
   );

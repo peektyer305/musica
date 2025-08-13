@@ -25,18 +25,7 @@ export default function AuthSync() {
       }
     })();
 
-    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state change:', event, session?.user?.email);
-      
-      // Handle different auth events
-      if (event === 'SIGNED_IN') {
-        console.log('User signed in:', session?.user?.email);
-        setLoading(false);
-      } else if (event === 'SIGNED_OUT') {
-        console.log('User signed out');
-        setLoading(false);
-      }
-      
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       router.refresh();
     });

@@ -14,6 +14,9 @@ export async function logout() {
     throw new Error("Failed to log out");
   }
 
+  // Optionally, you can redirect or revalidate the path after logout
+  // revalidatePath('/', 'layout');
+  // redirect('/');
   revalidatePath("/", "layout");
   redirect("/");
 }

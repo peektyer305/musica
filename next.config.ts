@@ -4,65 +4,21 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       // YouTube domains
-      {
-        protocol: 'https',
-        hostname: 'img.youtube.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'i.ytimg.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'yt3.ggpht.com',
-        pathname: '/**',
-      },
+      new URL('https://img.youtube.com/**'),
+      new URL('https://i.ytimg.com/**'),
+      new URL('https://yt3.ggpht.com/**'),
       // Spotify domains
-      {
-        protocol: 'https',
-        hostname: 'i.scdn.co',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'mosaic.scdn.co',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'lineup-images.scdn.co',
-        pathname: '/**',
-      },
+      new URL('https://i.scdn.co/**'),
+      new URL('https://mosaic.scdn.co/**'),
+      new URL('https://lineup-images.scdn.co/**'),
       // SoundCloud domains
-      {
-        protocol: 'https',
-        hostname: 'i1.sndcdn.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'a1.sndcdn.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'waveforms.sndcdn.com',
-        pathname: '/**',
-      },
+      new URL('https://i1.sndcdn.com/**'),
+      new URL('https://a1.sndcdn.com/**'),
+      new URL('https://waveforms.sndcdn.com/**'),
       // Supabase storage (for user icons)
-      {
-        protocol: 'https',
-        hostname: 'usiayvyiamxmztdfwegd.supabase.co',
-        pathname: '/storage/v1/object/public/**',
-      },
+      new URL('https://usiayvyiamxmztdfwegd.supabase.co/storage/v1/object/public/**'),
       // GitHub avatars
-      {
-        protocol: 'https',
-        hostname: 'avatars.githubusercontent.com',
-        pathname: '/**',
-      },
+      new URL('https://avatars.githubusercontent.com/**'),
     ],
   },
 };
