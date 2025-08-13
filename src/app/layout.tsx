@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
+import { AuthStoreProvider } from "@/stores/authStore";
+import { createClient } from "@/utils/supabase/server";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,19 +21,25 @@ export const metadata: Metadata = {
   description: "share your favorite music with the world",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = createClient();
+  const { data: { user } } = await (await supabase).auth.getUser();
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        <div className="pt-20">{children}</div>
-        <Footer />
+        {/* SSRの初期ユーザーをZustandに注入する */}
+        <AuthStoreProvider initialUser={user}>
+          <Header />
+          <div className="pt-20">{children}</div>
+          <Footer />
+        </AuthStoreProvider>
       </body>
     </html>
   );
