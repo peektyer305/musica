@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
+import AuthSync from "@/components/custom/AuthSync";
 import { AuthStoreProvider } from "@/stores/authStore";
 import { createClient } from "@/utils/supabase/server";
 
@@ -36,6 +37,7 @@ export default async function RootLayout({
       >
         {/* SSRの初期ユーザーをZustandに注入する */}
         <AuthStoreProvider initialUser={user}>
+          <AuthSync />
           <Header />
           <div className="pt-20">{children}</div>
           <Footer />

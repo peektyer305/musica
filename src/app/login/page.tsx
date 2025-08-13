@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,12 +11,36 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Eye, Mail, Lock, ArrowRight } from "lucide-react";
+import { Eye, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 
-import { login, signInWithGithub } from "./actions";
+
+
+import { useState } from "react";
+import { useAuthHelpers } from "@/lib/auth-helpers";
+import { signInWithGithub } from "./actions";
 import GithubButton from "@/components/custom/GithubButton";
 
 export default function LoginPage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { clientLogin } = useAuthHelpers();
+
+  const handleLogin = async (formData: FormData) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+      
+      await clientLogin(email, password);
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("ログインに失敗しました。メールアドレスとパスワードを確認してください。");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Main Content */}
@@ -23,12 +48,17 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           {/* Login Card */}
           <Card className="shadow-xl border-0">
-            <form>
+            <form action={handleLogin}>
               <CardHeader className="space-y-1 pb-6">
                 <CardTitle className="text-2xl text-center">ログイン</CardTitle>
                 <CardDescription className="text-center">
                   メールアドレスとパスワードを入力してください
                 </CardDescription>
+                {error && (
+                  <div className="bg-red-50 border border-red-200 text-red-600 px-3 py-2 rounded text-sm">
+                    {error}
+                  </div>
+                )}
               </CardHeader>
 
               <CardContent className="space-y-4">
@@ -97,11 +127,21 @@ export default function LoginPage() {
               <CardFooter className="flex flex-col space-y-4 pt-6">
                 {/* Login Button */}
                 <Button
-                  formAction={login}
-                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  ログイン
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ログイン中...
+                    </>
+                  ) : (
+                    <>
+                      ログイン
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
+                  )}
                 </Button>
 
                 {/* Sign Up Link */}

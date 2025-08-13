@@ -4,21 +4,65 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       // YouTube domains
-      new URL('https://img.youtube.com/**'),
-      new URL('https://i.ytimg.com/**'),
-      new URL('https://yt3.ggpht.com/**'),
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'yt3.ggpht.com',
+        pathname: '/**',
+      },
       // Spotify domains
-      new URL('https://i.scdn.co/**'),
-      new URL('https://mosaic.scdn.co/**'),
-      new URL('https://lineup-images.scdn.co/**'),
+      {
+        protocol: 'https',
+        hostname: 'i.scdn.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'mosaic.scdn.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lineup-images.scdn.co',
+        pathname: '/**',
+      },
       // SoundCloud domains
-      new URL('https://i1.sndcdn.com/**'),
-      new URL('https://a1.sndcdn.com/**'),
-      new URL('https://waveforms.sndcdn.com/**'),
+      {
+        protocol: 'https',
+        hostname: 'i1.sndcdn.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'a1.sndcdn.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'waveforms.sndcdn.com',
+        pathname: '/**',
+      },
       // Supabase storage (for user icons)
-      new URL('https://usiayvyiamxmztdfwegd.supabase.co/storage/v1/object/public/**'),
+      {
+        protocol: 'https',
+        hostname: 'usiayvyiamxmztdfwegd.supabase.co',
+        pathname: '/storage/v1/object/public/**',
+      },
       // GitHub avatars
-      new URL('https://avatars.githubusercontent.com/**'),
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+        pathname: '/**',
+      },
     ],
   },
 };
