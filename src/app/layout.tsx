@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
-import { AuthStoreProvider } from "@/stores/authStore";
 import { createClient } from "@/utils/supabase/server";
 
 const geistSans = Geist({
@@ -26,8 +25,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = createClient();
-  const { data: { user } } = await (await supabase).auth.getUser();
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
   return (
     <html lang="en">
@@ -35,11 +34,9 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* SSRの初期ユーザーをZustandに注入する */}
-        <AuthStoreProvider initialUser={user}>
-          <Header />
+          <Header initialUser={user} />
           <div className="pt-20">{children}</div>
           <Footer />
-        </AuthStoreProvider>
       </body>
     </html>
   );
