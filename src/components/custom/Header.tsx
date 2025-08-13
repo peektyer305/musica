@@ -3,42 +3,16 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Music, Info, PlusCircle, LogOut, LogIn, UserPlus, User } from "lucide-react";
 import Image from "next/image";
-import { useAuthStore } from "@/stores/authStore";
 
 type HeaderProps = {
     initialUser: any | null;
   };
 
-export default function Header({ initialUser }: HeaderProps) {
+export default function Header() {
 
- const { user } = useAuthStore();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  
-  const isLogin = !!user;
-  const userIcon = user?.user_metadata?.avatar_url || null;
-
-
-  useEffect(() => {
-   const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setIsLogin(!!user);
-      setUserIcon(user?.user_metadata?.avatar_url ?? null);
-    });
-
-    // 認証状態の変化を購読（任意だが実運用で安定）
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      setIsLogin(!!session?.user);
-      setUserIcon(session?.user?.user_metadata?.avatar_url ?? null);
-    });
-    return () => {
-      try {
-        sub.subscription.unsubscribe();
-      } catch {}
-    };
-  }, []);
-  
 
   // スクロール時のヘッダー表示制御
   const controlHeader = () => {
