@@ -1,14 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Music, Info, PlusCircle, LogOut, LogIn, UserPlus } from "lucide-react";
+import { Music, Info, PlusCircle, LogOut, LogIn, UserPlus, User } from "lucide-react";
+import Image from "next/image";
 import { createClient } from "@/utils/supabase/client";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-
+  const [userIcon, setUserIcon] = useState<string | null>(null);
   //現在のユーザー情報を取得
   const getCurrentUser = async () => {
     const supabase = createClient();
@@ -16,8 +17,12 @@ export default function Header() {
       data: { user },
     } = await supabase.auth.getUser();
     if (user) {
+      console.log("Current user:", user);
       setIsLogin(true);
+      // user.user_metadata.avatar_url ? setUserIcon(user.user_metadata.avatar_url) : setUserIcon("@static/userDefault.webp");
+      
     } else {
+      setUserIcon(null);
       setIsLogin(false);
     }
   };
@@ -104,6 +109,28 @@ export default function Header() {
           }`}
         >
           <ul className="flex flex-col md:flex-row md:space-x-6 p-4 md:p-0">
+            {/* User Icon - Mobile */}
+            {isLogin && userIcon && (
+              <li className="md:hidden border-b border-gray-300 pb-3 mb-3">
+                <div className="flex items-center gap-3 px-3 py-2">
+                  {userIcon.startsWith('@static/') ? (
+                    <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
+                      <User className="h-4 w-4 text-gray-600" />
+                    </div>
+                  ) : (
+                    <Image
+                      src={userIcon}
+                      alt="User Avatar"
+                      className="h-8 w-8 rounded-full object-cover"
+                      width={32}
+                      height={32}
+                    />
+                  )}
+                  <span className="font-medium text-gray-900">Profile</span>
+                </div>
+              </li>
+            )}
+            
             <li>
               <Link
                 href="/about"
@@ -134,6 +161,26 @@ export default function Header() {
                     Logout
                   </Link>
                 </li>
+                {/* User Icon - Desktop */}
+                {userIcon && (
+                  <li className="hidden md:block">
+                    <div className="flex items-center px-3 py-2">
+                      {userIcon.startsWith('@static/') ? (
+                        <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center">
+                          <User className="h-4 w-4" />
+                        </div>
+                      ) : (
+                        <Image
+                          src={userIcon}
+                          alt="User Avatar"
+                          className="h-8 w-8 rounded-full object-cover border-2 border-white/20"
+                          width={32}
+                          height={32}
+                        />
+                      )}
+                    </div>
+                  </li>
+                )}
               </>
             ) : (
               <>

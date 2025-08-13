@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
       new URL('https://waveforms.sndcdn.com/**'),
       // Supabase storage (for user icons)
       new URL('https://usiayvyiamxmztdfwegd.supabase.co/storage/v1/object/public/**'),
+      // GitHub avatars
+      new URL('https://avatars.githubusercontent.com/**'),
     ],
   },
 };
