@@ -20,7 +20,6 @@ export default function Header() {
     if (user) {
       console.log("Current user:", user);
       setIsLogin(true);
-      // user.user_metadata.avatar_url ? setUserIcon(user.user_metadata.avatar_url) : setUserIcon("@static/userDefault.webp");
       
     } else {
       setUserIcon(null);
