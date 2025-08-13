@@ -20,11 +20,12 @@ export const metadata: Metadata = {
   description: "share your favorite music with the world",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 

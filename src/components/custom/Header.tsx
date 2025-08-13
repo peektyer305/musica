@@ -10,6 +10,8 @@ type HeaderProps = {
   };
 
   export default function Header({ initialUser }: HeaderProps) {
+
+export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLogin, setIsLogin] = useState<boolean>(!!initialUser);
   const [isVisible, setIsVisible] = useState(true);
@@ -35,6 +37,7 @@ type HeaderProps = {
       } catch {}
     };
   }, []);
+  
 
   // スクロール時のヘッダー表示制御
   const controlHeader = () => {
