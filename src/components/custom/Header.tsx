@@ -4,28 +4,40 @@ import Link from "next/link";
 import { Music, Info, PlusCircle, LogOut, LogIn, UserPlus, User } from "lucide-react";
 import Image from "next/image";
 import { createClient } from "@/utils/supabase/client";
+
+type HeaderProps = {
+    initialUser: any | null;
+  };
+
+  export default function Header({ initialUser }: HeaderProps) {
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState<boolean>(!!initialUser);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [userIcon, setUserIcon] = useState<string | null>(null);
+  const [userIcon, setUserIcon] = useState<string | null>(initialUser?.user_metadata?.avatar_url || null);
+
+
+  useEffect(() => {
+   const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setIsLogin(!!user);
+      setUserIcon(user?.user_metadata?.avatar_url ?? null);
+    });
+
+    // 認証状態の変化を購読（任意だが実運用で安定）
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setIsLogin(!!session?.user);
+      setUserIcon(session?.user?.user_metadata?.avatar_url ?? null);
+    });
+    return () => {
+      try {
+        sub.subscription.unsubscribe();
+      } catch {}
+    };
+  }, []);
   
-  //現在のユーザー情報を取得
-  const getCurrentUser = async () => {
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (user) {
-      console.log("Current user:", user);
-      setIsLogin(true);
-      
-    } else {
-      setUserIcon(null);
-      setIsLogin(false);
-    }
-  };
 
   // スクロール時のヘッダー表示制御
   const controlHeader = () => {
@@ -44,10 +56,6 @@ export default function Header() {
       setLastScrollY(currentScrollY);
     }
   };
-
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
