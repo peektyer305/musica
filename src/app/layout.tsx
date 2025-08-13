@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
-import { AuthStoreProvider } from "@/stores/authStore";
 import { createClient } from "@/utils/supabase/server";
 
 const geistSans = Geist({
@@ -34,12 +33,9 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* SSRの初期ユーザーをZustandに注入する */}
-        <AuthStoreProvider initialUser={user}>
           <Header />
           <div className="pt-20">{children}</div>
           <Footer />
-        </AuthStoreProvider>
       </body>
     </html>
   );

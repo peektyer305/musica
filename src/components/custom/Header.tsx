@@ -4,15 +4,12 @@ import Link from "next/link";
 import { Music, Info, PlusCircle, LogOut, LogIn, UserPlus, User } from "lucide-react";
 import Image from "next/image";
 import { createClient } from "@/utils/supabase/client";
-import { useAuthStore } from "@/stores/authStore";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [userIcon, setUserIcon] = useState<string | null>(null);
-  const user = useAuthStore((state) => state.user);
-  const isLoading = useAuthStore((state) => state.isLoading);
   
   //現在のユーザー情報を取得
   const getCurrentUser = async () => {
