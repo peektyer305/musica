@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
-import { createClient } from "@/utils/supabase/server";
+import AuthSync from "@/components/custom/AuthSync";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,23 +20,20 @@ export const metadata: Metadata = {
   description: "share your favorite music with the world",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* SSRの初期ユーザーをZustandに注入する */}
-          <Header initialUser={user} />
-          <div className="pt-20">{children}</div>
-          <Footer />
+        <AuthSync />
+        <Header />
+        <div className="pt-20">{children}</div>
+        <Footer />
       </body>
     </html>
   );
