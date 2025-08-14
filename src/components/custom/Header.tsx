@@ -99,16 +99,16 @@ export default function Header({ initialUser }: HeaderProps) {
               <li className="md:hidden border-b border-gray-300 pb-3 mb-3">
                 <div className="flex items-center gap-3 px-3 py-2">
                   {userIcon.startsWith('@static/') ? (
-                    <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
-                      <User className="h-4 w-4 text-gray-600" />
+                    <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+                      <User className="h-10 w-10 text-gray-600" />
                     </div>
                   ) : (
                     <Image
                       src={userIcon}
                       alt="User Avatar"
-                      className="h-8 w-8 rounded-full object-cover"
-                      width={32}
-                      height={32}
+                      className="h-10 w-10 rounded-full object-cover"
+                      width={40}
+                      height={40}
                     />
                   )}
                   <span className="font-medium text-gray-900">Profile</span>
@@ -148,19 +148,19 @@ export default function Header({ initialUser }: HeaderProps) {
                 </li>
                 {/* User Icon - Desktop */}
                 {userIcon && (
-                  <li className="hidden md:block">
+                  <li className="hidden md:flex md:items-center">
                     <div className="flex items-center px-3 py-2">
                       {userIcon.startsWith('@static/') ? (
-                        <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center">
-                          <User className="h-4 w-4" />
+                        <div className="h-14 w-14 rounded-full bg-white/20 flex items-center justify-center">
+                          <User className="h-14 w-14" />
                         </div>
                       ) : (
                         <Image
                           src={userIcon}
                           alt="User Avatar"
-                          className="h-8 w-8 rounded-full object-cover border-2 border-white/20"
-                          width={32}
-                          height={32}
+                          className="h-14 w-14 rounded-full object-cover border-2 border-white/20"
+                          width={80}
+                          height={80}
                         />
                       )}
                     </div>

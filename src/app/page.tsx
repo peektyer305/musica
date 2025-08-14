@@ -36,7 +36,6 @@ const getPosts = async (): Promise<Post[]> => {
 
 export default async function Home() {
   const posts = await getPosts();
-  posts && console.log("Posts fetched:", posts);
   return (
     <main className="flex-1 px-6 py-12">
       <div className="text-center mb-8">

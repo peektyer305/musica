@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
 import { createClient } from "@/utils/supabase/server";
+import fetchUserIconFromDb from "@/lib/fetchUserIconFromDb";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,8 +26,26 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  //サーバーでユーザー情報所得→クライアントに伝播
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  
+  //dbにユーザーアイコンがある場合は取得し入れ替える
+  if (user) {
+    if(user.user_metadata.avatar_url){
+      console.log("user:", user);
+      const userIcon = await fetchUserIconFromDb(user.id, user.user_metadata.avatar_url);
+      if (userIcon) {
+        user.user_metadata.avatar_url = userIcon;
+        console.log("Fetched user icon:", userIcon); // デバッグ用ログ
+      }
+    } else {
+      const userIcon = await fetchUserIconFromDb(user.id, "@static/default_user_icon.png");
+      console.log("No avatar_url in user metadata, using default icon.");
+      user.user_metadata.avatar_url = userIcon; // デフォルトアイコンを設定
+    }
+    
+  }
 
   return (
     <html lang="en">
