@@ -49,6 +49,7 @@ export default function Header({ initialUser }: HeaderProps) {
       <div className="container mx-auto px-6 md:py-2 py-4 flex items-center justify-between">
         <Link
           href="/"
+          onClick={() => setMenuOpen(false)}
           className="text-2xl font-extrabold tracking-tight flex items-center"
         >
           <Music className="inline-block mr-2 h-7 w-7 " /> Musica
@@ -97,7 +98,10 @@ export default function Header({ initialUser }: HeaderProps) {
             {/* User Icon - Mobile */}
             {isLogin && userIcon && (
               <li className="md:hidden border-b border-gray-300 pb-3 mb-3">
-                <div className="flex items-center gap-3 px-3 py-2">
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-100 transition"
+                >
                   {userIcon.startsWith('@static/') ? (
                     <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
                       <User className="h-10 w-10 text-gray-600" />
@@ -112,13 +116,14 @@ export default function Header({ initialUser }: HeaderProps) {
                     />
                   )}
                   <span className="font-medium text-gray-900">Profile</span>
-                </div>
+                </button>
               </li>
             )}
             
             <li className="md:hidden">
               <Link
                 href="/about"
+                onClick={() => setMenuOpen(false)}
                 className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
               >
                 <Info className="h-4 w-4" />
@@ -139,6 +144,7 @@ export default function Header({ initialUser }: HeaderProps) {
                 <li>
                   <button
                     type="button"
+                    onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
                     // onClick={() => setReadyPost(true)}
                   >
@@ -149,6 +155,7 @@ export default function Header({ initialUser }: HeaderProps) {
                 <li>
                   <Link
                     href="/logout"
+                    onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
                   >
                     <LogOut className="h-4 w-4" />
@@ -187,15 +194,16 @@ export default function Header({ initialUser }: HeaderProps) {
                     About
                   </Link>
                 </li>
-                <li className="hidden md:block">
+                <li>
                   <div className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition">
                     <LogIn className="h-4 w-4" />
-                    <Link href="/login">Login</Link>
+                    <Link href="/login" onClick={() => setMenuOpen(false)}>Login</Link>
                   </div>
                 </li>
-                <li className="hidden md:block">
+                <li>
                   <Link
                     href="/signup"
+                    onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
                   >
                     <UserPlus className="h-4 w-4" />
