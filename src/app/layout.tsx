@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
-
 import { createClient } from "@/utils/supabase/server";
 
 const geistSans = Geist({
@@ -34,7 +33,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
+        <Header initialUser={user} />
         <div className="pt-20">{children}</div>
         <Footer />
       </body>
