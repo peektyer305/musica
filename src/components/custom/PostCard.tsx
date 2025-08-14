@@ -23,7 +23,7 @@ export default function PostCard(props: { post: Post }) {
           />
         )}
         <div className="ml-3 text-base font-semibold truncate max-w-[140px]">
-          {post.Users.name}1
+          {post.Users.name}
           <p className="text-gray-500 text-sm">@{post.Users.client_id}</p>
         </div>
         
