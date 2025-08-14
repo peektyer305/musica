@@ -1,4 +1,3 @@
-import Image from "next/image";
 
 import Post from "@/interfaces/domain/post";
 import { fetchMetadata } from "@/lib/fetchMetadata";
