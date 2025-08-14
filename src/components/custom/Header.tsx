@@ -46,7 +46,7 @@ export default function Header({ initialUser }: HeaderProps) {
     <header className={`bg-gradient-to-r from-purple-600 to-indigo-600 text-white fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out ${
       isVisible ? 'translate-y-0' : '-translate-y-full'
     }`}>
-      <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="container mx-auto px-6 md:py-2 py-4 flex items-center justify-between">
         <Link
           href="/"
           className="text-2xl font-extrabold tracking-tight flex items-center"
@@ -93,7 +93,7 @@ export default function Header({ initialUser }: HeaderProps) {
             menuOpen ? "flex" : "hidden"
           }`}
         >
-          <ul className="flex flex-col md:flex-row md:space-x-6 p-4 md:p-0">
+          <ul className="flex flex-col md:flex-row md:items-center md:space-x-6 p-4 md:p-0">
             {/* User Icon - Mobile */}
             {isLogin && userIcon && (
               <li className="md:hidden border-b border-gray-300 pb-3 mb-3">
@@ -116,7 +116,7 @@ export default function Header({ initialUser }: HeaderProps) {
               </li>
             )}
             
-            <li>
+            <li className="md:hidden">
               <Link
                 href="/about"
                 className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
@@ -127,6 +127,15 @@ export default function Header({ initialUser }: HeaderProps) {
             </li>
             {isLogin ? (
               <>
+                <li className="hidden md:block">
+                  <Link
+                    href="/about"
+                    className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
+                  >
+                    <Info className="h-4 w-4" />
+                    About
+                  </Link>
+                </li>
                 <li>
                   <button
                     type="button"
@@ -169,13 +178,22 @@ export default function Header({ initialUser }: HeaderProps) {
               </>
             ) : (
               <>
-                <li>
+                <li className="hidden md:block">
+                  <Link
+                    href="/about"
+                    className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
+                  >
+                    <Info className="h-4 w-4" />
+                    About
+                  </Link>
+                </li>
+                <li className="hidden md:block">
                   <div className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition">
                     <LogIn className="h-4 w-4" />
                     <Link href="/login">Login</Link>
                   </div>
                 </li>
-                <li>
+                <li className="hidden md:block">
                   <Link
                     href="/signup"
                     className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
