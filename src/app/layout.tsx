@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
 import { createClient } from "@/utils/supabase/server";
+import fetchUserIconFromDb from "@/lib/fetchUserIconFromDb";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,9 +26,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  //サーバーでユーザー情報所得→クライアントに伝播
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-
+  //dbにユーザーアイコンがある場合は取得し入れ替える
+  const userIcon = await fetchUserIconFromDb(user?.id || null);
+  console.log("userId:", user?.id);
+  user && (user.user_metadata && (user.user_metadata.avatar_url = userIcon));
+  console.log("userIcon:", userIcon);
   return (
     <html lang="en">
       <body
