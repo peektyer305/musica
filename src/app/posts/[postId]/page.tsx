@@ -8,9 +8,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 interface PostPageProps {
-  params: {
+  params: Promise<{
     postId: string;
-  };
+  }>;
 }
 
 async function getPostData(postId: string): Promise<Post | null> {
@@ -45,7 +45,7 @@ async function getPostData(postId: string): Promise<Post | null> {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const { postId } = params;
+  const { postId } = await params;
 
   const postData = await getPostData(postId);
 
