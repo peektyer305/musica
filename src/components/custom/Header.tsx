@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { Music, Info, PlusCircle, LogOut, LogIn, UserPlus, User } from "lucide-react";
 import Image from "next/image";
@@ -21,6 +21,7 @@ export default function Header({ initialUser }: HeaderProps) {
   const [postContent, setPostContent] = useState("");
   const [musicUrl, setMusicUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   
   const isLogin = !!initialUser;
   const userIcon = initialUser?.user_metadata?.avatar_url || null;
@@ -93,10 +94,30 @@ export default function Header({ initialUser }: HeaderProps) {
       };
     }
   }, [lastScrollY]);
+
+  // Handle click outside to close menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
   return (
-    <header className={`bg-gradient-to-r from-purple-600 to-indigo-600 text-white fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out ${
-      isVisible ? 'translate-y-0' : '-translate-y-full'
-    }`}>
+    <header 
+      ref={headerRef}
+      className={`bg-gradient-to-r from-purple-600 to-indigo-600 text-white fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out ${
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      }`}
+    >
       <div className="container mx-auto px-6 md:py-2 py-4 flex items-center justify-between">
         <Link
           href="/"
