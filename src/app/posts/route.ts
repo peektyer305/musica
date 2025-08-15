@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 export async function GET() {
   const supabase = await createClient();
@@ -15,4 +15,57 @@ export async function GET() {
   }
 
   return NextResponse.json(data, { status: 200 });
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const supabase = await createClient();
+    
+    // Get the authenticated user
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { title, content, music_url } = await request.json();
+
+    // Validate required fields
+    if (!title || !content || !music_url) {
+      return NextResponse.json(
+        { error: "Title, content, and music URL are required" }, 
+        { status: 400 }
+      );
+    }
+
+    const { data: appUser, error:dbError } = await supabase.schema("app").from("Users").select().eq("private_id", user.id).single();
+    if (dbError || !appUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // Insert the post
+    const { data, error } = await supabase
+      .schema("app")
+      .from("Posts")
+      .insert([
+        {
+          title,
+          content,
+          music_url,
+          user_id: appUser.id,
+        }
+      ])
+      .select(`*, Users(name, icon_url, client_id)`)
+      .single();
+
+    if (error) {
+      console.error("Error creating post:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json(data, { status: 201 });
+  } catch (error) {
+    console.error("Error in POST /posts:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }

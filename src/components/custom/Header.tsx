@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Music, Info, PlusCircle, LogOut, LogIn, UserPlus, User } from "lucide-react";
 import Image from "next/image";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 type HeaderProps = {
     initialUser: any | null;
@@ -12,9 +16,56 @@ export default function Header({ initialUser }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [postModalOpen, setPostModalOpen] = useState(false);
+  const [postTitle, setPostTitle] = useState("");
+  const [postContent, setPostContent] = useState("");
+  const [musicUrl, setMusicUrl] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const isLogin = !!initialUser;
   const userIcon = initialUser?.user_metadata?.avatar_url || null;
+
+  //投稿処理
+  const handlePostSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!postTitle.trim() || !postContent.trim() || !musicUrl.trim()) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: postTitle.trim(),
+          content: postContent.trim(),
+          music_url: musicUrl.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create post');
+      }
+
+      // Reset form and close modal on success
+      setPostTitle("");
+      setPostContent("");
+      setMusicUrl("");
+      setPostModalOpen(false);
+      
+      // Optionally refresh the page to show the new post
+      window.location.reload();
+    } catch (error) {
+      console.error('Error creating post:', error);
+      // TODO: Show user-friendly error message
+      alert(error instanceof Error ? error.message : 'Failed to create post');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   // スクロール時のヘッダー表示制御
   const controlHeader = () => {
@@ -142,15 +193,73 @@ export default function Header({ initialUser }: HeaderProps) {
                   </Link>
                 </li>
                 <li>
-                  <button
-                    type="button"
-                    onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
-                    // onClick={() => setReadyPost(true)}
-                  >
-                    <PlusCircle className="h-4 w-4" />
-                    Post
-                  </button>
+                  <Sheet open={postModalOpen} onOpenChange={setPostModalOpen}>
+                    <SheetTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
+                      >
+                        <PlusCircle className="h-4 w-4" />
+                        Post
+                      </button>
+                    </SheetTrigger>
+                    <SheetContent className="w-full sm:max-w-md">
+                      <SheetHeader>
+                        <SheetTitle>Create New Post</SheetTitle>
+                      </SheetHeader>
+                      <form onSubmit={handlePostSubmit} className="space-y-4 mt-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="postTitle">Title</Label>
+                          <Input
+                            id="postTitle"
+                            value={postTitle}
+                            onChange={(e) => setPostTitle(e.target.value)}
+                            placeholder="Enter post title..."
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="postContent">Content</Label>
+                          <textarea
+                            id="postContent"
+                            value={postContent}
+                            onChange={(e) => setPostContent(e.target.value)}
+                            placeholder="What's on your mind?"
+                            className="w-full min-h-[120px] px-3 py-2 border border-input rounded-md bg-transparent text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-ring resize-none"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="musicUrl">Music URL</Label>
+                          <Input
+                            id="musicUrl"
+                            type="url"
+                            value={musicUrl}
+                            onChange={(e) => setMusicUrl(e.target.value)}
+                            placeholder="https://example.com/music.mp3"
+                            required
+                          />
+                        </div>
+                        <div className="flex gap-2 pt-4">
+                          <Button 
+                            type="submit" 
+                            className="flex-1"
+                            disabled={!postTitle.trim() || !postContent.trim() || !musicUrl.trim() || isSubmitting}
+                          >
+                            {isSubmitting ? "Posting..." : "Post"}
+                          </Button>
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            onClick={() => setPostModalOpen(false)}
+                            disabled={isSubmitting}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </form>
+                    </SheetContent>
+                  </Sheet>
                 </li>
                 <li>
                   <Link
