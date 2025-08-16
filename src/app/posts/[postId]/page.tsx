@@ -54,6 +54,23 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
+  // Get current authenticated user to check ownership
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  let isOwner = false;
+  if (user) {
+    // Get the app user to compare with post owner
+    const { data: appUser } = await supabase
+      .schema("app")
+      .from("Users")
+      .select("id")
+      .eq("private_id", user.id)
+      .single();
+    
+    isOwner = appUser?.id === postData.user_id;
+  }
+
   const formattedCreatedAt = formatDate(postData.created_at);
 
   return (
@@ -88,7 +105,7 @@ export default async function PostPage({ params }: PostPageProps) {
               {formattedCreatedAt}
             </div>
             <div className="ml-3 flex-shrink-0">
-              <EllipsisMenu />
+              <EllipsisMenu postId={postId} isOwner={isOwner} />
             </div>
           </div>
 
