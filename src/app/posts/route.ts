@@ -121,7 +121,7 @@ export async function DELETE(request: NextRequest) {
       console.error("Error deleting post:", deleteError);
       return NextResponse.json({ error: deleteError.message }, { status: 500 });
     }
-
+    //redirect
     return NextResponse.json({ message: "Post deleted successfully" }, { status: 200 });
   } catch (error) {
     console.error("Error in DELETE /posts:", error);

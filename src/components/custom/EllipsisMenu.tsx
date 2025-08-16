@@ -2,6 +2,8 @@
 import { is } from "date-fns/locale";
 import { CrossIcon, Ellipsis } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 
 type EllipsisMenuProps = {
@@ -14,6 +16,7 @@ export default function EllipsisMenu({ postId, isOwner = false }: EllipsisMenuPr
     const [isMessageOpen, setIsMessageOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const router = useRouter();
     
     const handleDelete = async () => {
         if (!postId) return;
@@ -30,10 +33,11 @@ export default function EllipsisMenu({ postId, isOwner = false }: EllipsisMenuPr
                 throw new Error(errorData.error || 'Failed to delete post');
             }
 
-            // Close modal and refresh page on success
+            // Close modal and redirect to root on success
             setIsMessageOpen(false);
             setIsOpen(false);
-            window.location.reload();
+            toast.success("Delete is completed!");
+            router.push('/');
         } catch (error) {
             console.error('Error deleting post:', error);
             alert(error instanceof Error ? error.message : 'Failed to delete post');
