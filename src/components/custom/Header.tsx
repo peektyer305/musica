@@ -162,8 +162,10 @@ export default function Header({ initialUser }: HeaderProps) {
           )}
         </button>
         <nav
-          className={`absolute inset-x-0 top-full bg-white text-gray-800 flex flex-col md:static md:flex md:flex-row md:bg-transparent md:text-white ${
-            menuOpen ? "flex" : "hidden"
+          className={`absolute inset-x-0 top-full bg-white text-gray-800 flex flex-col md:static md:flex md:flex-row md:bg-transparent md:text-white transition-all duration-300 ease-in-out transform ${
+            menuOpen 
+              ? "flex opacity-100 translate-y-0 pointer-events-auto" 
+              : "flex opacity-0 -translate-y-2 pointer-events-none md:flex md:opacity-100 md:translate-y-0 md:pointer-events-auto"
           }`}
         >
           <ul className="flex flex-col md:flex-row md:items-center md:space-x-6 p-4 md:p-0">
