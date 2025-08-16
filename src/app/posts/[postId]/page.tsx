@@ -6,11 +6,12 @@ import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import EllipsisMenu from "@/components/custom/EllipsisMenu";
 
 interface PostPageProps {
-  params: {
+  params: Promise<{
     postId: string;
-  };
+  }>;
 }
 
 async function getPostData(postId: string): Promise<Post | null> {
@@ -45,12 +46,29 @@ async function getPostData(postId: string): Promise<Post | null> {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const { postId } = params;
+  const { postId } = await params;
 
   const postData = await getPostData(postId);
 
   if (!postData) {
     notFound();
+  }
+
+  // Get current authenticated user to check ownership
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  let isOwner = false;
+  if (user) {
+    // Get the app user to compare with post owner
+    const { data: appUser } = await supabase
+      .schema("app")
+      .from("Users")
+      .select("id")
+      .eq("private_id", user.id)
+      .single();
+    
+    isOwner = appUser?.id === postData.user_id;
   }
 
   const formattedCreatedAt = formatDate(postData.created_at);
@@ -85,6 +103,9 @@ export default async function PostPage({ params }: PostPageProps) {
             </Link>
             <div className="text-xs sm:text-sm md:text-base text-gray-600 ml-2 flex-shrink-0">
               {formattedCreatedAt}
+            </div>
+            <div className="ml-3 flex-shrink-0">
+              <EllipsisMenu postId={postId} isOwner={isOwner} />
             </div>
           </div>
 

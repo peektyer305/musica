@@ -103,12 +103,20 @@ export default function Header({ initialUser }: HeaderProps) {
       }
     };
 
+    const handlePointerDownOutside = (event: PointerEvent) => {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
     if (menuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('pointerdown', handlePointerDownOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('pointerdown', handlePointerDownOutside);
     };
   }, [menuOpen]);
   return (
@@ -219,7 +227,7 @@ export default function Header({ initialUser }: HeaderProps) {
                       <button
                         type="button"
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
+                        className="cursor-pointer flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
                       >
                         <PlusCircle className="h-4 w-4" />
                         Post
