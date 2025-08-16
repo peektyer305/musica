@@ -7,21 +7,34 @@ import { useState, useEffect, useRef } from "react";
 export default function EllipsisMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const [isMessageOpen, setIsMessageOpen] = useState(false);
-    const ModalRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
     const handleDelete = () => {
         // Handle delete action
     };
 
     useEffect(() => {
         const handlePointerDownOutside = (event: PointerEvent) => {
-            if (ModalRef.current && !ModalRef.current.contains(event.target as Node)) {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
                 setIsOpen(false);
             }
         };
+
+        const handleMouseDownOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener("pointerdown", handlePointerDownOutside);
+            document.addEventListener("mousedown", handleMouseDownOutside);
+        }
+
         return () => {
             document.removeEventListener("pointerdown", handlePointerDownOutside);
+            document.removeEventListener("mousedown", handleMouseDownOutside);
         };
-    },[isOpen])
+    }, [isOpen])
     return (
         <div className="relative">
             <button onClick={() => setIsOpen(!isOpen)} className="cursor-pointer">
@@ -41,7 +54,7 @@ export default function EllipsisMenu() {
             </svg>) : <Ellipsis />}
             </button>
             {isOpen && (
-                <div ref={ModalRef} className="absolute right-0 top-full z-20 bg-white rounded-lg shadow-2xl border border-gray-200 mt-2 min-w-48 overflow-hidden">
+                <div ref={menuRef} className="absolute right-0 top-full z-20 bg-white rounded-lg shadow-2xl border border-gray-200 mt-2 min-w-48 overflow-hidden">
                     <ul className="py-2">
                         <li className="cursor-pointer hover:bg-gray-50 px-4 py-3 text-gray-700 hover:text-gray-900 transition-colors duration-200 flex items-center space-x-3">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
