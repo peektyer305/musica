@@ -5,6 +5,7 @@ import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
 import { createClient } from "@/utils/supabase/server";
 import fetchUserIconFromDb from "@/lib/fetchUserIconFromDb";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,6 +56,23 @@ export default async function RootLayout({
         <Header initialUser={user} />
         <div className="pt-20">{children}</div>
         <Footer />
+        <Toaster 
+          position="top-right"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              background: '#363636',
+              color: '#fff',
+            },
+            success: {
+              duration: 3000,
+              iconTheme: {
+                primary: '#4ade80',
+                secondary: '#fff',
+              },
+            },
+          }}
+        />
       </body>
     </html>
   );
