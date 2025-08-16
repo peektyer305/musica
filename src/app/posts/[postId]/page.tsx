@@ -6,6 +6,7 @@ import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import EllipsisMenu from "@/components/custom/EllipsisMenu";
 
 interface PostPageProps {
   params: Promise<{
@@ -85,6 +86,9 @@ export default async function PostPage({ params }: PostPageProps) {
             </Link>
             <div className="text-xs sm:text-sm md:text-base text-gray-600 ml-2 flex-shrink-0">
               {formattedCreatedAt}
+            </div>
+            <div className="ml-3 flex-shrink-0">
+              <EllipsisMenu />
             </div>
           </div>
 
