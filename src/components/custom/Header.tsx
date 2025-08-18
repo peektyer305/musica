@@ -1,12 +1,8 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { Music, Info, PlusCircle, LogOut, LogIn, UserPlus, User, FileText, Music2, Link as LinkIcon } from "lucide-react";
-import Image from "next/image";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Music } from "lucide-react";
+import NavigationMenu from "./NavigationMenu";
 
 type HeaderProps = {
     initialUser: any | null;
@@ -16,57 +12,11 @@ export default function Header({ initialUser }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [postModalOpen, setPostModalOpen] = useState(false);
-  const [postTitle, setPostTitle] = useState("");
-  const [postContent, setPostContent] = useState("");
-  const [musicUrl, setMusicUrl] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
   
   const isLogin = !!initialUser;
   const userIcon = initialUser?.user_metadata?.avatar_url || null;
 
-  //投稿処理
-  const handlePostSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!postTitle.trim() || !postContent.trim() || !musicUrl.trim()) return;
-    
-    setIsSubmitting(true);
-    
-    try {
-      const response = await fetch('/posts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: postTitle.trim(),
-          content: postContent.trim(),
-          music_url: musicUrl.trim(),
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create post');
-      }
-
-      // Reset form and close modal on success
-      setPostTitle("");
-      setPostContent("");
-      setMusicUrl("");
-      setPostModalOpen(false);
-      
-      // Optionally refresh the page to show the new post
-      window.location.reload();
-    } catch (error) {
-      console.error('Error creating post:', error);
-      // TODO: Show user-friendly error message
-      alert(error instanceof Error ? error.message : 'Failed to create post');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   // スクロール時のヘッダー表示制御
   const controlHeader = () => {
@@ -169,224 +119,12 @@ export default function Header({ initialUser }: HeaderProps) {
             </svg>
           )}
         </button>
-        <nav
-          className={`absolute inset-x-0 top-full bg-white text-gray-800 flex flex-col md:static md:flex md:flex-row md:bg-transparent md:text-white transition-all duration-300 ease-in-out transform ${
-            menuOpen 
-              ? "flex opacity-100 translate-y-0 pointer-events-auto" 
-              : "flex opacity-0 -translate-y-2 pointer-events-none md:flex md:opacity-100 md:translate-y-0 md:pointer-events-auto"
-          }`}
-        >
-          <ul className="flex flex-col md:flex-row md:items-center md:space-x-6 p-4 md:p-0">
-            {/* User Icon - Mobile */}
-            {isLogin && userIcon && (
-              <li className="md:hidden border-b border-gray-300 pb-3 mb-3">
-                <button
-                  onClick={() => setMenuOpen(false)}
-                  className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-100 transition"
-                >
-                  {userIcon.startsWith('@static/') ? (
-                    <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                      <User className="h-10 w-10 text-gray-600" />
-                    </div>
-                  ) : (
-                    <Image
-                      src={userIcon}
-                      alt="User Avatar"
-                      className="h-10 w-10 rounded-full object-cover"
-                      width={40}
-                      height={40}
-                    />
-                  )}
-                  <span className="font-medium text-gray-900">Profile</span>
-                </button>
-              </li>
-            )}
-            
-            <li className="md:hidden">
-              <Link
-                href="/about"
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
-              >
-                <Info className="h-4 w-4" />
-                About
-              </Link>
-            </li>
-            {isLogin ? (
-              <>
-                <li className="hidden md:block">
-                  <Link
-                    href="/about"
-                    className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
-                  >
-                    <Info className="h-4 w-4" />
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Sheet open={postModalOpen} onOpenChange={setPostModalOpen}>
-                    <SheetTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => setMenuOpen(false)}
-                        className="cursor-pointer flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
-                      >
-                        <PlusCircle className="h-4 w-4" />
-                        Post
-                      </button>
-                    </SheetTrigger>
-                    <SheetContent className="w-full sm:max-w-lg bg-gradient-to-br from-purple-50 to-indigo-50 border-l-4 border-purple-500">
-                      <SheetHeader className="space-y-3 pb-6 border-b border-purple-200">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 bg-purple-100 rounded-full">
-                            <PlusCircle className="h-6 w-6 text-purple-600" />
-                          </div>
-                          <SheetTitle className="text-2xl font-bold text-gray-800">Create New Post</SheetTitle>
-                        </div>
-                        <p className="text-gray-600 text-sm">Share your music and thoughts with the community</p>
-                      </SheetHeader>
-                      <form onSubmit={handlePostSubmit} className="space-y-6 mt-8">
-                        <div className="space-y-3">
-                          <Label htmlFor="postTitle" className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                            <FileText className="h-4 w-4 text-purple-600" />
-                            Title
-                          </Label>
-                          <Input
-                            id="postTitle"
-                            value={postTitle}
-                            onChange={(e) => setPostTitle(e.target.value)}
-                            placeholder="Give your post a catchy title..."
-                            className="border-2 border-gray-200 focus:border-purple-400 focus:ring-purple-400 bg-white shadow-sm"
-                            required
-                          />
-                        </div>
-                        <div className="space-y-3">
-                          <Label htmlFor="postContent" className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                            <FileText className="h-4 w-4 text-purple-600" />
-                            Content
-                          </Label>
-                          <textarea
-                            id="postContent"
-                            value={postContent}
-                            onChange={(e) => setPostContent(e.target.value)}
-                            placeholder="Share your thoughts, feelings, or story about this music..."
-                            className="w-full min-h-[140px] px-4 py-3 border-2 border-gray-200 rounded-lg bg-white text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:border-purple-400 resize-none"
-                            required
-                          />
-                        </div>
-                        <div className="space-y-3">
-                          <Label htmlFor="musicUrl" className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                            <Music2 className="h-4 w-4 text-purple-600" />
-                            Music URL
-                          </Label>
-                          <div className="relative">
-                            <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                            <Input
-                              id="musicUrl"
-                              type="url"
-                              value={musicUrl}
-                              onChange={(e) => setMusicUrl(e.target.value)}
-                              placeholder="https://soundcloud.com/your-track or https://spotify.com/..."
-                              className="pl-10 border-2 border-gray-200 focus:border-purple-400 focus:ring-purple-400 bg-white shadow-sm"
-                              required
-                            />
-                          </div>
-                          <p className="text-xs text-gray-500">Paste a link to your music from SoundCloud, Spotify, YouTube, etc.</p>
-                        </div>
-                        <div className="flex gap-3 pt-6 border-t border-purple-200">
-                          <Button 
-                            type="submit" 
-                            className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3 shadow-lg hover:shadow-xl transition-all duration-200"
-                            disabled={!postTitle.trim() || !postContent.trim() || !musicUrl.trim() || isSubmitting}
-                          >
-                            {isSubmitting ? (
-                              <div className="flex items-center gap-2">
-                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                Posting...
-                              </div>
-                            ) : (
-                              <div className="flex items-center gap-2">
-                                <PlusCircle className="h-4 w-4" />
-                                Create Post
-                              </div>
-                            )}
-                          </Button>
-                          <Button 
-                            type="button" 
-                            variant="outline" 
-                            onClick={() => setPostModalOpen(false)}
-                            disabled={isSubmitting}
-                            className="px-6 border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50"
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      </form>
-                    </SheetContent>
-                  </Sheet>
-                </li>
-                <li>
-                  <Link
-                    href="/logout"
-                    onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    Logout
-                  </Link>
-                </li>
-                {/* User Icon - Desktop */}
-                {userIcon && (
-                  <li className="hidden md:flex md:items-center">
-                    <div className="flex items-center px-3 py-2">
-                      {userIcon.startsWith('@static/') ? (
-                        <div className="h-14 w-14 rounded-full bg-white/20 flex items-center justify-center">
-                          <User className="h-14 w-14" />
-                        </div>
-                      ) : (
-                        <Image
-                          src={userIcon}
-                          alt="User Avatar"
-                          className="h-14 w-14 rounded-full object-cover border-2 border-white/20"
-                          width={80}
-                          height={80}
-                        />
-                      )}
-                    </div>
-                  </li>
-                )}
-              </>
-            ) : (
-              <>
-                <li className="hidden md:block">
-                  <Link
-                    href="/about"
-                    className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
-                  >
-                    <Info className="h-4 w-4" />
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <div className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition">
-                    <LogIn className="h-4 w-4" />
-                    <Link href="/login" onClick={() => setMenuOpen(false)}>Login</Link>
-                  </div>
-                </li>
-                <li>
-                  <Link
-                    href="/signup"
-                    onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 md:hover:bg-indigo-700 md:hover:text-white transition"
-                  >
-                    <UserPlus className="h-4 w-4" />
-                    SignUp
-                  </Link>
-                </li>
-              </>
-            )}
-          </ul>
-        </nav>
+        <NavigationMenu 
+          menuOpen={menuOpen}
+          isLogin={isLogin}
+          userIcon={userIcon}
+          onMenuClose={() => setMenuOpen(false)}
+        />
       </div>
     </header>
   );
