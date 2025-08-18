@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { Music, Info, PlusCircle, LogOut, LogIn, UserPlus, User } from "lucide-react";
+import { Music, Info, PlusCircle, LogOut, LogIn, UserPlus, User, FileText, Music2, Link as LinkIcon } from "lucide-react";
 import Image from "next/image";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -235,55 +235,88 @@ export default function Header({ initialUser }: HeaderProps) {
                         Post
                       </button>
                     </SheetTrigger>
-                    <SheetContent className="w-full sm:max-w-md">
-                      <SheetHeader>
-                        <SheetTitle>Create New Post</SheetTitle>
+                    <SheetContent className="w-full sm:max-w-lg bg-gradient-to-br from-purple-50 to-indigo-50 border-l-4 border-purple-500">
+                      <SheetHeader className="space-y-3 pb-6 border-b border-purple-200">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-purple-100 rounded-full">
+                            <PlusCircle className="h-6 w-6 text-purple-600" />
+                          </div>
+                          <SheetTitle className="text-2xl font-bold text-gray-800">Create New Post</SheetTitle>
+                        </div>
+                        <p className="text-gray-600 text-sm">Share your music and thoughts with the community</p>
                       </SheetHeader>
-                      <form onSubmit={handlePostSubmit} className="space-y-4 mt-6">
-                        <div className="space-y-2">
-                          <Label htmlFor="postTitle">Title</Label>
+                      <form onSubmit={handlePostSubmit} className="space-y-6 mt-8">
+                        <div className="space-y-3">
+                          <Label htmlFor="postTitle" className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                            <FileText className="h-4 w-4 text-purple-600" />
+                            Title
+                          </Label>
                           <Input
                             id="postTitle"
                             value={postTitle}
                             onChange={(e) => setPostTitle(e.target.value)}
-                            placeholder="Enter post title..."
+                            placeholder="Give your post a catchy title..."
+                            className="border-2 border-gray-200 focus:border-purple-400 focus:ring-purple-400 bg-white shadow-sm"
                             required
                           />
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="postContent">Content</Label>
+                        <div className="space-y-3">
+                          <Label htmlFor="postContent" className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                            <FileText className="h-4 w-4 text-purple-600" />
+                            Content
+                          </Label>
                           <textarea
                             id="postContent"
                             value={postContent}
                             onChange={(e) => setPostContent(e.target.value)}
-                            placeholder="What's on your mind?"
-                            className="w-full min-h-[120px] px-3 py-2 border border-input rounded-md bg-transparent text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-ring resize-none"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="musicUrl">Music URL</Label>
-                          <Input
-                            id="musicUrl"
-                            type="url"
-                            value={musicUrl}
-                            onChange={(e) => setMusicUrl(e.target.value)}
-                            placeholder="https://example.com/music.mp3"
+                            placeholder="Share your thoughts, feelings, or story about this music..."
+                            className="w-full min-h-[140px] px-4 py-3 border-2 border-gray-200 rounded-lg bg-white text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:border-purple-400 resize-none"
                             required
                           />
                         </div>
-                        <div className="flex gap-2 pt-4">
+                        <div className="space-y-3">
+                          <Label htmlFor="musicUrl" className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                            <Music2 className="h-4 w-4 text-purple-600" />
+                            Music URL
+                          </Label>
+                          <div className="relative">
+                            <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                            <Input
+                              id="musicUrl"
+                              type="url"
+                              value={musicUrl}
+                              onChange={(e) => setMusicUrl(e.target.value)}
+                              placeholder="https://soundcloud.com/your-track or https://spotify.com/..."
+                              className="pl-10 border-2 border-gray-200 focus:border-purple-400 focus:ring-purple-400 bg-white shadow-sm"
+                              required
+                            />
+                          </div>
+                          <p className="text-xs text-gray-500">Paste a link to your music from SoundCloud, Spotify, YouTube, etc.</p>
+                        </div>
+                        <div className="flex gap-3 pt-6 border-t border-purple-200">
                           <Button 
                             type="submit" 
-                            className="flex-1"
+                            className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3 shadow-lg hover:shadow-xl transition-all duration-200"
                             disabled={!postTitle.trim() || !postContent.trim() || !musicUrl.trim() || isSubmitting}
                           >
-                            {isSubmitting ? "Posting..." : "Post"}
+                            {isSubmitting ? (
+                              <div className="flex items-center gap-2">
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                Posting...
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-2">
+                                <PlusCircle className="h-4 w-4" />
+                                Create Post
+                              </div>
+                            )}
                           </Button>
                           <Button 
                             type="button" 
                             variant="outline" 
                             onClick={() => setPostModalOpen(false)}
                             disabled={isSubmitting}
+                            className="px-6 border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50"
                           >
                             Cancel
                           </Button>
