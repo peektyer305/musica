@@ -66,7 +66,7 @@ export default async function PostPage({ params }: PostPageProps) {
       .from("Users")
       .select("id")
       .eq("private_id", user.id)
-      .single();
+      .maybeSingle();
     
     isOwner = appUser?.id === postData.user_id;
   }
