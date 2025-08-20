@@ -4,7 +4,7 @@ import "./globals.css";
 import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
 import { createClient } from "@/utils/supabase/server";
-import fetchUserIconFromDb from "@/lib/fetchUserIconFromAuthId";
+import fetchUserIconFromAuthId from "@/lib/fetchUserIconFromAuthId";
 import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
@@ -35,13 +35,13 @@ export default async function RootLayout({
   if (user) {
     if(user.user_metadata.avatar_url){
       console.log("user:", user);
-      const userIcon = await fetchUserIconFromDb(user.id, user.user_metadata.avatar_url);
+      const userIcon = await fetchUserIconFromAuthId(user.id, user.user_metadata.avatar_url);
       if (userIcon) {
         user.user_metadata.avatar_url = userIcon;
         console.log("Fetched user icon:", userIcon); // デバッグ用ログ
       }
     } else {
-      const userIcon = await fetchUserIconFromDb(user.id, "@static/default_user_icon.png");
+      const userIcon = await fetchUserIconFromAuthId(user.id, "@static/default_user_icon.png");
       console.log("No avatar_url in user metadata, using default icon.");
       user.user_metadata.avatar_url = userIcon; // デフォルトアイコンを設定
     }
