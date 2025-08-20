@@ -31,6 +31,8 @@ export default async function RootLayout({
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const appUser = user ? await fetchAppUserFromAuthId(user.id) : null;
+  console.log("appUser:", appUser);
+  console.log("authUser:", user);
   return (
     <html lang="en">
       <body

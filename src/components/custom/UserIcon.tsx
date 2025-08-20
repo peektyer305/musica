@@ -5,14 +5,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import LogoutModal from "./LogoutModal";
+import DomainUser from "@/interfaces/domain/user";
 
 type UserIconProps = {
   userIcon: string | null;
+  appUser: DomainUser | null;
   isMobile?: boolean;
   onMenuClose?: () => void;
 };
 
-export default function UserIcon({ userIcon, isMobile = false, onMenuClose }: UserIconProps) {
+export default function UserIcon({ userIcon, appUser, isMobile = false, onMenuClose }: UserIconProps) {
   if (!userIcon) return null;
 
   if (isMobile) {
@@ -35,7 +37,8 @@ export default function UserIcon({ userIcon, isMobile = false, onMenuClose }: Us
               height={40}
             />
           )}
-          <span className="font-medium text-gray-900">Profile</span>
+          <span className="font-medium text-gray-900">{appUser?.name}</span>
+          <span className="text-sm text-gray-500">@{appUser?.client_id}</span>
         </button>
       </li>
     );
@@ -80,7 +83,8 @@ export default function UserIcon({ userIcon, isMobile = false, onMenuClose }: Us
                   height={48}
                 />
               )}
-              <SheetTitle className="text-xl font-bold text-gray-800">User Menu</SheetTitle>
+              <SheetTitle className="text-xl font-bold text-gray-800">{appUser?.name}</SheetTitle>
+              <span className="text-sm text-gray-500">@{appUser?.client_id}</span>
             </div>
           </SheetHeader>
           <div className="space-y-2">

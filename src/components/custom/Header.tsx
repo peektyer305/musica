@@ -133,6 +133,7 @@ export default function Header({ authUser, appUser }: HeaderProps) {
           menuOpen={menuOpen}
           isLogin={isLogin}
           userIcon={userIcon}
+          appUser={appUser}
           onMenuClose={() => setMenuOpen(false)}
         />
       </div>
