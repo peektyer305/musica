@@ -4,15 +4,17 @@ import { Info, LogIn, LogOut, UserPlus } from "lucide-react";
 import UserIcon from "./UserIcon";
 import PostModal from "./PostModal";
 import LogoutModal from "./LogoutModal";
+import DomainUser from "@/interfaces/domain/user";
 
 type NavigationMenuProps = {
   menuOpen: boolean;
   isLogin: boolean;
   userIcon: string | null;
+  appUser?: DomainUser | null; // Optional appUser for user details
   onMenuClose: () => void;
 };
 
-export default function NavigationMenu({ menuOpen, isLogin, userIcon, onMenuClose }: NavigationMenuProps) {
+export default function NavigationMenu({ menuOpen, isLogin, userIcon, appUser, onMenuClose }: NavigationMenuProps) {
   return (
     <nav
       className={`absolute inset-x-0 top-full bg-white text-gray-800 flex flex-col md:static md:flex md:flex-row md:bg-transparent md:text-white transition-all duration-300 ease-in-out transform ${
@@ -23,8 +25,7 @@ export default function NavigationMenu({ menuOpen, isLogin, userIcon, onMenuClos
     >
       <ul className="flex flex-col md:flex-row md:items-center md:space-x-6 p-4 md:p-0">
         {/* User Icon - Mobile */}
-        {isLogin && <UserIcon userIcon={userIcon} isMobile={true} onMenuClose={onMenuClose} />}
-        
+        {isLogin && appUser && <UserIcon userIcon={userIcon} appUser={appUser} isMobile={true} onMenuClose={onMenuClose} />}
         <li className="md:hidden">
           <Link
             href="/about"
@@ -62,7 +63,7 @@ export default function NavigationMenu({ menuOpen, isLogin, userIcon, onMenuClos
               </LogoutModal>
             </li>
             {/* User Icon - Desktop */}
-            <UserIcon userIcon={userIcon} isMobile={false} />
+            {appUser && <UserIcon userIcon={userIcon} appUser={appUser} isMobile={false} />}
           </>
         ) : (
           <>
