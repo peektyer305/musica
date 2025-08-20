@@ -6,4 +6,6 @@ export default interface InfraUser {
   client_id: string;
   created_at: string;
   updated_at?: string;
+  following: string[] | null;
+  followers: string[] | null;
 }

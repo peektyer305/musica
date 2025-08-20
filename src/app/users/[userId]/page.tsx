@@ -88,8 +88,8 @@ export default async function UserPage({ params }: UserPageProps) {
   }
 
   const userStats = {
-    following: 0,
-    followers: 0,
+    following: userData.following?.length || 0,
+    followers: userData.followers?.length || 0,
     posts: userPosts.length,
   };
 
