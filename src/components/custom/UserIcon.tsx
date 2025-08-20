@@ -1,11 +1,10 @@
 "use client";
 import { useState } from "react";
-import { User, LogOut, Info } from "lucide-react";
+import { User } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import LogoutModal from "./LogoutModal";
 import DomainUser from "@/interfaces/domain/user";
+import Link from "next/link";
 
 type UserIconProps = {
   userIcon: string | null;
@@ -67,7 +66,7 @@ export default function UserIcon({ userIcon, appUser, isMobile = false, onMenuCl
             )}
           </button>
         </SheetTrigger>
-        <SheetContent className="w-full sm:max-w-md bg-white">
+        <SheetContent className="w-full sm:max-w-md bg-white" aria-describedby="user-menu">
           <SheetHeader className="space-y-3 pb-6">
             <div className="flex items-center gap-3">
               {userIcon.startsWith('@static/') ? (
@@ -87,24 +86,10 @@ export default function UserIcon({ userIcon, appUser, isMobile = false, onMenuCl
               <span className="text-sm text-gray-500">@{appUser?.client_id}</span>
             </div>
           </SheetHeader>
-          <div className="space-y-2">
-            <Link
-              href="/about"
-              onClick={() => setUserMenuOpen(false)}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors md:hidden "
-            >
-              <Info className="h-5 w-5 text-gray-600" />
-              <span className="font-medium text-gray-800">About</span>
-            </Link>
-            <LogoutModal>
-              <button
-                onClick={() => setUserMenuOpen(false)}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <LogOut className="h-5 w-5 text-gray-600" />
-                <span className="font-medium text-gray-800">Logout</span>
-              </button>
-            </LogoutModal>
+          <div className="space-y-2 ml-5">
+           <Link href={`users/${appUser?.id}`} onClick={() => setUserMenuOpen(false)}>
+             My Page
+           </Link>
           </div>
         </SheetContent>
       </Sheet>
