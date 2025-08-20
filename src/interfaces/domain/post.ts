@@ -1,4 +1,4 @@
-export default interface Post {
+export default interface DomainPost {
   id: number;
   created_at: string;
   title: string;

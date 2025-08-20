@@ -1,4 +1,4 @@
-export default interface User {
+export default interface DomainUser {
   id: string;
   name: string;
   description?: string;
@@ -6,4 +6,6 @@ export default interface User {
   client_id: string;
   created_at: string;
   updated_at?: string;
+  following: string[] | null;
+  followers: string[] | null;
 }
