@@ -4,7 +4,7 @@ import "./globals.css";
 import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
 import { createClient } from "@/utils/supabase/server";
-import fetchUserIconFromDb from "@/lib/fetchUserIconFromDb";
+import fetchUserIconFromDb from "@/lib/fetchUserIconFromAuthId";
 import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({

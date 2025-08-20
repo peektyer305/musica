@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 
-export default async function fetchUserIconFromDb(userId: string | null, userAvator: string): Promise<string> {
+export default async function fetchUserIconFromAuthId(userId: string | null, userAvator: string): Promise<string> {
     const supabase = await createClient();
     //userIdとprivate_idが一致する行のicon_urlを取得
     const { data, error } = await supabase
