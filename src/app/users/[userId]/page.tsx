@@ -1,41 +1,18 @@
 import { createClient } from "@/utils/supabase/server";
-import InfraUser from "@/interfaces/infrastructure/user";
 import InfraPost from "@/interfaces/infrastructure/post";
 import Post from "@/interfaces/domain/post";
-import User from "@/interfaces/domain/user";
 import { fetchMetadata } from "@/lib/fetchMetadata";
 import { mergePostData } from "@/lib/mergePostData";
 import PostCard from "@/components/custom/PostCard";
 import UserProfileHeader from "@/components/custom/UserProfileHeader";
 import UserStats from "@/components/custom/UserStats";
 import { notFound } from "next/navigation";
+import fetchAppUserFromAppId from "@/lib/fetchAppUserFromAppId";
 
 interface UserPageProps {
   params: {
     userId: string;
   };
-}
-
-async function getUserData(userId: string): Promise<User | null> {
-  try {
-    const supabase = await createClient();
-    const { data, error } = await supabase
-      .schema("app")
-      .from("Users")
-      .select("*")
-      .eq("id", userId)
-      .single();
-
-    if (error) {
-      console.error("Error fetching user:", error);
-      return null;
-    }
-
-    return data;
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    return null;
-  }
 }
 
 async function getUserPosts(userId: string): Promise<Post[]> {
@@ -76,10 +53,10 @@ async function getUserPosts(userId: string): Promise<Post[]> {
 }
 
 export default async function UserPage({ params }: UserPageProps) {
-  const { userId } = params;
+  const { userId } =  await params;
 
   const [userData, userPosts] = await Promise.all([
-    getUserData(userId),
+    fetchAppUserFromAppId(userId),
     getUserPosts(userId),
   ]);
 
