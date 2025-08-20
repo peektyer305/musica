@@ -4,8 +4,8 @@ import "./globals.css";
 import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
 import { createClient } from "@/utils/supabase/server";
-import fetchUserIconFromAuthId from "@/lib/fetchUserIconFromAuthId";
 import { Toaster } from "react-hot-toast";
+import fetchAppUserFromAuthId from "@/lib/fetchAppUserFromAuthId";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +30,7 @@ export default async function RootLayout({
   //サーバーでユーザー情報所得→クライアントに伝播
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const appUser = user ? await fetchUserIconFromAuthId(user.id) : null;
+  const appUser = user ? await fetchAppUserFromAuthId(user.id) : null;
   return (
     <html lang="en">
       <body

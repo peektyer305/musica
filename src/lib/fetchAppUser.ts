@@ -1,7 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
 import User from "@/interfaces/domain/user";
+import DomainUser from "@/interfaces/domain/user";
 
-export default async function fetchAppUser(userId: string | null): Promise<User | null> {
+export default async function fetchAppUser(userId: string | null): Promise<DomainUser | null> {
     if (!userId) return null;
     
     const supabase = await createClient();
