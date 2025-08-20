@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { Music } from "lucide-react";
 import NavigationMenu from "./NavigationMenu";
@@ -29,7 +29,7 @@ export default function Header({ authUser, appUser }: HeaderProps) {
   const userIcon = defineUserIcon();
 
   // スクロール時のヘッダー表示制御
-  const controlHeader = () => {
+  const controlHeader = useCallback(() => {
     if (typeof window !== 'undefined') {
       const currentScrollY = window.scrollY;
       
@@ -44,7 +44,7 @@ export default function Header({ authUser, appUser }: HeaderProps) {
       
       setLastScrollY(currentScrollY);
     }
-  };
+  }, [lastScrollY]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -53,7 +53,7 @@ export default function Header({ authUser, appUser }: HeaderProps) {
         window.removeEventListener('scroll', controlHeader);
       };
     }
-  }, [lastScrollY]);
+  }, [controlHeader]);
 
   // Handle click outside to close menu
   useEffect(() => {

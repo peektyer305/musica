@@ -10,9 +10,9 @@ import { notFound } from "next/navigation";
 import fetchAppUserFromAppId from "@/lib/fetchAppUserFromAppId";
 
 interface UserPageProps {
-  params: {
+  params: Promise<{
     userId: string;
-  };
+  }>;
 }
 
 async function getUserPosts(userId: string): Promise<Post[]> {

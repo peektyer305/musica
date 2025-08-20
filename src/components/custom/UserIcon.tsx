@@ -14,6 +14,9 @@ type UserIconProps = {
 };
 
 export default function UserIcon({ userIcon, appUser, isMobile = false, onMenuClose }: UserIconProps) {
+  // Desktop version with modal menu - moved before early returns to fix React Hooks rule
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+
   if (!userIcon) return null;
 
   if (isMobile) {
@@ -42,9 +45,6 @@ export default function UserIcon({ userIcon, appUser, isMobile = false, onMenuCl
       </li>
     );
   }
-
-  // Desktop version with modal menu
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   return (
     <li className="hidden md:flex md:items-center">
