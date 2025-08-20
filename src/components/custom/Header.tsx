@@ -3,20 +3,30 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { Music } from "lucide-react";
 import NavigationMenu from "./NavigationMenu";
+import DomainUser from "@/interfaces/domain/user";
+import { User } from "@supabase/supabase-js";
 
 type HeaderProps = {
-    initialUser: any | null;
+    authUser: User | null;
+    appUser: DomainUser | null;
   };
 
-export default function Header({ initialUser }: HeaderProps) {
+export default function Header({ authUser, appUser }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const headerRef = useRef<HTMLElement>(null);
-  
-  const isLogin = !!initialUser;
-  const userIcon = initialUser?.user_metadata?.avatar_url || null;
 
+  const isLogin = !!authUser;
+  const defineUserIcon = () =>{
+    if (appUser && appUser.icon_url) {
+      return appUser.icon_url;
+    }
+    return authUser?.user_metadata?.avatar_url || "@static/avatar.png";
+  }
+
+  // ユーザーアイコンの定義
+  const userIcon = defineUserIcon();
 
   // スクロール時のヘッダー表示制御
   const controlHeader = () => {
